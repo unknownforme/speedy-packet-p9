@@ -3,17 +3,18 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
+        // Create a default Company for the Admin/Director to manage
+        $mainCompany = Company::create(['name' => 'Speedy Packet Logistics']);
+
         // Admin User
         $admin = User::create([
             'name' => 'Administrator',

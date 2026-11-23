@@ -4,32 +4,25 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RoleAndPermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Reset cached roles and permissions
-        app()[\Spatie\Permission\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        // Create roles
         $roles = [
-            'Admin',
-            'Directeur',
-            'Verzender',
-            'Pakket-ontvanger',
-            'Distributiemedewerker',
-            'Koerier',
+            "Admin",
+            "Directeur",
+            "Verzender",
+            "Pakket-ontvanger",
+            "Distributiemedewerker",
+            "Koerier",
         ];
 
         foreach ($roles as $role) {
-            Role::create(['name' => $role]);
+            Role::create(["name" => $role]);
         }
-
-        // We can also create specific permissions if needed later
     }
 }

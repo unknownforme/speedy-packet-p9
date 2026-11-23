@@ -6,26 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('package_status_history', function (Blueprint $table) {
+        Schema::create('returns', function (Blueprint $table) {
             $table->id();
             $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
+            $table->timestamp('requested_at');
+            $table->text('reason')->nullable();
             $table->string('status');
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->text('notes')->nullable();
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('package_status_history');
+        Schema::dropIfExists('returns');
     }
 };
