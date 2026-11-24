@@ -17,7 +17,10 @@ return new class extends Migration
             $table->integer('weight_grams');
             $table->integer('shipping_cost_cents');
             $table->string('current_status');
+            $table->string('receiver_email');
             $table->string('destination_province');
+            $table->string('destination_address');
+            $table->integer('house_number');
             $table->foreignId('location_id')->nullable()->constrained('distribution_locations');
             $table->timestamps();
         });
