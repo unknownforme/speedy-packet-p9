@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('current_status');
             $table->string('receiver_email');
             $table->string('destination_province');
-            $table->string('destination_address');
+            $table->string('destination_street');
             $table->integer('house_number');
+            $table->char('house_number_suffix')->nullable();
             $table->foreignId('location_id')->nullable()->constrained('distribution_locations');
             $table->timestamps();
         });
