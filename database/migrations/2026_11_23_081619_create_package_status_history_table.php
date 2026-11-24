@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
             $table->string('status');
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('location_id')->nullable()->constrained('users');
             $table->text('notes')->nullable();
             $table->timestamp('created_at');
         });
