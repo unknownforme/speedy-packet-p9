@@ -58,9 +58,9 @@ class Package extends Model
         return $this->hasMany(PackageStatusHistory::class);
     }
 
-    public function returnRequest(): HasOne
+    public function packageReturn(): HasOne
     {
-        return $this->hasOne(ReturnRequest::class);
+        return $this->hasOne(PackageReturn::class);
     }
 
     /**

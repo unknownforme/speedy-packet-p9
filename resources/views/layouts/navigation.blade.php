@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ url('/') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-autumn-orange" />
                     </a>
                 </div>
@@ -17,6 +17,11 @@
                     <x-nav-link :href="route('packages.index')" :active="request()->routeIs('packages.*')">
                         {{ __('Pakketten') }}
                     </x-nav-link>
+                    @if(Auth::user()->hasAnyRole(['Koerier', 'Admin']))
+                        <x-nav-link :href="route('courier.index')" :active="request()->routeIs('courier.*')">
+                            {{ __('Koerier') }}
+                        </x-nav-link>
+                    @endif
                     @if(Auth::user()->hasAnyRole(['Distributiemedewerker', 'Admin']))
                         <x-nav-link :href="route('distribution.index')" :active="request()->routeIs('distribution.*')">
                             {{ __('Distributie') }}
@@ -83,6 +88,11 @@
             <x-responsive-nav-link :href="route('packages.index')" :active="request()->routeIs('packages.*')">
                 {{ __('Pakketten') }}
             </x-responsive-nav-link>
+            @if(Auth::user()->hasAnyRole(['Koerier', 'Admin']))
+                <x-responsive-nav-link :href="route('courier.index')" :active="request()->routeIs('courier.*')">
+                    {{ __('Koerier') }}
+                </x-responsive-nav-link>
+            @endif
             @if(Auth::user()->hasAnyRole(['Distributiemedewerker', 'Admin']))
                 <x-responsive-nav-link :href="route('distribution.index')" :active="request()->routeIs('distribution.*')">
                     {{ __('Distributie') }}

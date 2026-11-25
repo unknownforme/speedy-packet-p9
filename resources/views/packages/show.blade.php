@@ -85,5 +85,29 @@
                 </div>
             </div>
         </div>
+                </div>
+            </div>
+
+            <!-- Return Request Form -->
+            @if(Auth::check() && (Auth::user()->id === $package->receiver_id || Auth::user()->hasRole('Admin')) && $package->current_status === 'Geleverd')
+                <div class="bg-autumn-surface border border-autumn-orange/30 p-6 rounded-none">
+                    <h2 class="text-xl font-bold text-autumn-cream mb-4">Retour Aanvragen</h2>
+                    <form action="{{ route('packages.return.store', $package) }}" method="POST" class="space-y-4">
+                        @csrf
+                        <div>
+                            <label for="reason" class="block text-sm font-medium text-autumn-cream mb-2">Reden voor retour:</label>
+                            <textarea id="reason" name="reason" rows="3" required class="w-full bg-autumn-bg border border-autumn-brown rounded-none text-autumn-cream focus:border-autumn-orange focus:ring-0"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-autumn-orange text-white py-3 px-6 rounded-none font-bold hover:bg-autumn-brown transition shadow-md">
+                            Verzoek Indien
+                        </button>
+                    </form>
+                </div>
+            @elseif($package->current_status === 'Geleverd')
+                <div class="bg-autumn-surface border border-autumn-brown/30 p-4 rounded-none text-center">
+                    <p class="text-sm text-autumn-cream/60 italic">Retourverzoek is niet mogelijk voor dit pakket (mogelijk buiten de 30 dagen termijn).</p>
+                </div>
+            @endif
+
     </div>
 </x-app-layout>

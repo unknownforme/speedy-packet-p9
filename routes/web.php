@@ -2,12 +2,17 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DistributionController;
+use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\ReturnController;
+use App\Http\Controllers\CourierController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/track/{tracking_number}', [TrackingController::class, 'show'])->name('tracking.show');
+
 
 Route::get('/dashboard', function () {
     $user = Auth::user();
@@ -33,6 +38,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/distribution/scan', [DistributionController::class, 'scan'])->name('distribution.scan');
         Route::post('/distribution/update-status', [DistributionController::class, 'updateStatus'])->name('distribution.update-status');
     });
+    // Courier routes
+    Route::middleware('role:Koerier|Admin')->prefix('courier')->name('courier.')->group(function () {
+        Route::get('/', [CourierController::class, 'index'])->name('index');
+        Route::get('/{package}', [CourierController::class, 'show'])->name('show');
+        Route::post('/{package}/outcome', [CourierController::class, 'update'])->name('update');
+    });
+
 
     // Impersonation routes
     Route::middleware('impersonate')->group(function () {
@@ -45,3 +57,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+    // Return Management
+    Route::post('/packages/{package}/return', [ReturnController::class, 'store'])->name('packages.return.store');
+    Route::get('/packages/{package}/return-receipt', [ReturnController::class, 'downloadReceipt'])->name('packages.return.receipt');

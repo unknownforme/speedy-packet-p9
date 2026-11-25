@@ -48,8 +48,6 @@ class PackageService
             ]);
 
             // Create the first history entry
-            // We assume the sender is the company, but we need a user to record the action in history
-            // We'll use the sender_id passed in the request (which is the logged-in user)
             $package->statusHistory()->create([
                 'status' => 'Bestelling geplaatst',
                 'user_id' => $data['sender_id'] ?? null,
@@ -58,5 +56,40 @@ class PackageService
 
             return $package;
         });
+    }
+
+    /**
+     * Record a delivery outcome from the courier.
+     *
+     * @param Package $package
+     * @param string $outcome
+     * @param string|null $reason
+     * @return void
+     */
+    public function recordDeliveryOutcome(Package $package, string $outcome, string $reason = null): void
+    {
+        $status = 'Geleverd';
+        $note = '';
+
+        if ($outcome === 'delivered_recipient') {
+            $note = 'Direct aan de ontvanger geleverd.';
+        } elseif ($outcome === 'delivered_neighbor') {
+            $note = 'Bij de buren afgeleverd.';
+        } elseif ($outcome === 'delivered_pickup') {
+            $note = 'Bij een afhaalpunt afgeleverd.';
+        } elseif ($outcome === 'failed') {
+            $status = 'Mislukte levering';
+            $note = 'Levering mislukt. ' . ($reason ? 'Reden: ' . $reason : '');
+        }
+
+        // Record the status change in history
+        $package->statusHistory()->create([
+            'status' => $status,
+            'user_id' => auth()->id(),
+            'note' => $note,
+            'created_at' => now(),
+        ]);
+
+        $package->update(['current_status' => $status]);
     }
 }
