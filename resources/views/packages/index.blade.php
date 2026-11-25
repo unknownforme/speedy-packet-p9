@@ -10,7 +10,7 @@
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-autumn-cream">Mijn zendingen</h2>
                 <a href="{{ route('packages.create') }}" class="bg-autumn-orange text-white px-4 py-2 rounded-none font-bold hover:bg-autumn-brown transition duration-300 shadow-md">
-                    + New Package
+                    + nieuw pakket
                 </a>
             </div>
 

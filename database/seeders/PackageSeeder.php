@@ -71,15 +71,7 @@ class PackageSeeder extends Seeder
             DB::table("package_status_history")->insert([
                 "package_id" => $packageId,
                 "status" => "Bestelling geplaatst",
-                "user_id" => $sender->id,
                 "created_at" => now()->subDays(2),
-            ]);
-
-            DB::table("package_status_history")->insert([
-                "package_id" => $packageId,
-                "status" => "Pakket klaargezet door verzender",
-                "user_id" => $sender->id,
-                "created_at" => now()->subDays(1),
             ]);
         }
     }

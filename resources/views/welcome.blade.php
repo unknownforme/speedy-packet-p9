@@ -79,11 +79,24 @@
                 </div>
             </div>
             <div class="lg:w-1/2 mt-16 lg:mt-0 flex justify-center">
-                <div class="relative w-72 h-72 lg:w-96 lg:h-96 bg-autumn-orange/20 rounded-none flex items-center justify-center animate-pulse">
+                <div class="relative w-72 h-72 lg:w-96 lg:h-96 bg-autumn-orange/20 rounded-none flex items-center justify-center">
                     <div class="absolute inset-0 bg-autumn-orange/10 rounded-none scale-110"></div>
-                    <svg class="w-48 h-48 lg:w-64 lg:h-64 text-autumn-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V4a2 2 0 00-2-2H8a2 2 0 00-2 2v9m4-4V10m0 3h.01M13 13h.01M13 13l-3-3m3 3l3-3m-3 3v-3m3 3v-3m-3 3H10"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path>
+                    <svg class="w-48 h-48 lg:w-64 lg:h-64 text-autumn-orange" fill="none" stroke="currentColor" viewBox="0 0 50 50" width="100" height= xmlns="http://www.w3.org/2000/svg">
+ 
+
+                        <rect x="7.595" y="17.168"
+                                width="25.649" height="27.481"
+                                fill="#fff"/>
+
+                        <path d="M33.44 45.099 39.546 33.226"/>
+                        <path d="M7.614 16.955 13.920 9.450"/>
+                        <path d="M32.841 17.295 39.148 9.795"/>
+                        <path d="M13.413 9.752 39.50 9.693"/>
+                        <path d="M39.373 33.662 39.013 9.692"/>
+                        <path d="M11.875 21.062 25.341 23.875"/>
+                        <path d="M12.642 21.062 11.619 26.432"/>
+                        <path d="M24.574 23.875 23.381 28.989"/>
+                        <path d="M11.023 26.420 24.062 29.318"/>
                     </svg>
                 </div>
             </div>

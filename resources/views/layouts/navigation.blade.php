@@ -15,16 +15,16 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('packages.index')" :active="request()->routeIs('packages.*')">
-                        {{ __('Packages') }}
+                        {{ __('Pakketten') }}
                     </x-nav-link>
                     @if(Auth::user()->hasAnyRole(['Distributiemedewerker', 'Admin']))
                         <x-nav-link :href="route('distribution.index')" :active="request()->routeIs('distribution.*')">
-                            {{ __('Distribution') }}
+                            {{ __('Distributie') }}
                         </x-nav-link>
                     @endif
                     @if(Auth::user()->hasRole('Admin'))
                         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                            {{ __('Admin Panel') }}
+                            {{ __('Admin paneel') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -46,7 +46,7 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('profiel') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -55,7 +55,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('uitloggen') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -81,16 +81,16 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('packages.index')" :active="request()->routeIs('packages.*')">
-                {{ __('Packages') }}
+                {{ __('Pakketten') }}
             </x-responsive-nav-link>
             @if(Auth::user()->hasAnyRole(['Distributiemedewerker', 'Admin']))
                 <x-responsive-nav-link :href="route('distribution.index')" :active="request()->routeIs('distribution.*')">
-                    {{ __('Distribution') }}
+                    {{ __('Distributie') }}
                 </x-responsive-nav-link>
             @endif
             @if(Auth::user()->hasRole('Admin'))
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                    {{ __('Admin Panel') }}
+                    {{ __('Admin Paneel') }}
                 </x-responsive-nav-link>
             @endif
         </div>
@@ -104,7 +104,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('profiel') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
@@ -113,7 +113,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('uitloggen') }}
                     </x-responsive-nav-link>
                 </form>
             </div>

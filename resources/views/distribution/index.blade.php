@@ -10,7 +10,7 @@
             
             <!-- Quick Scan Section -->
             <div class="bg-autumn-surface border border-autumn-brown/20 p-8 shadow-lg">
-                <h3 class="text-lg font-bold text-autumn-cream mb-4 uppercase tracking-wider">Scan Package</h3>
+                <h3 class="text-lg font-bold text-autumn-cream mb-4 uppercase tracking-wider">Scan pakket</h3>
                 <form id="scan-form" class="flex flex-col md:flex-row gap-4">
                     @csrf
                     <input type="text" id="tracking_input" name="tracking_number" placeholder="Enter tracking number..." 
@@ -28,8 +28,8 @@
             <!-- Package List Section -->
             <div class="bg-autumn-surface border border-autumn-brown/20 shadow-lg">
                 <div class="p-6 border-b border-autumn-brown/20 flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-autumn-cream uppercase tracking-wider">Pending Processing</h3>
-                    <span class="text-xs text-autumn-cream/50">Showing items in 'Registered', 'At DC', or 'Sorting'</span>
+                    <h3 class="text-lg font-bold text-autumn-cream uppercase tracking-wider">Wachten op verwerken.</h3>
+                    <span class="text-xs text-autumn-cream/50">laat pakketten zien in 'geregistreerd', 'bij hoofdkantoor', of 'in sortering'</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-autumn-brown/20">
@@ -37,9 +37,9 @@
                             <tr>
                                 <th class="px-6 py-3 text-left font-medium">Tracking</th>
                                 <th class="px-6 py-3 text-left font-medium">Status</th>
-                                <th class="px-6 py-3 text-left font-medium">Destination</th>
-                                <th class="px-6 py-3 text-left font-medium">Created</th>
-                                <th class="px-6 py-3 text-left font-medium">Actions</th>
+                                <th class="px-6 py-3 text-left font-medium">doel</th>
+                                <th class="px-6 py-3 text-left font-medium">gemaakt op</th>
+                                <th class="px-6 py-3 text-left font-medium">acties</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-autumn-brown/20">
@@ -54,12 +54,12 @@
                                     <td class="px-6 py-4 text-sm text-autumn-cream/70">{{ $package->destination_province }}</td>
                                     <td class="px-6 py-4 text-sm text-autumn-cream/70">{{ $package->created_at->format('M d, Y') }}</td>
                                     <td class="px-6 py-4 text-sm">
-                                        <a href="{{ route('packages.show', $package->id) }}" class="text-autumn-orange hover:text-autumn-cream transition">View</a>
+                                        <a href="{{ route('packages.show', $package->id) }}" class="text-autumn-orange hover:text-autumn-cream transition">Bekijk</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-10 text-center text-sm text-autumn-cream/50">No packages pending processing.</td>
+                                    <td colspan="5" class="px-6 py-10 text-center text-sm text-autumn-cream/50">Geen pakketten om te verwerken.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -94,7 +94,7 @@
                             <div class="bg-autumn-surface border-2 border-autumn-orange p-6 animate-in fade-in duration-300">
                                 <div class="flex justify-between items-start mb-6">
                                     <div>
-                                        <h4 class="text-xl font-bold text-autumn-cream">Package Found</h4>
+                                        <h4 class="text-xl font-bold text-autumn-cream">Pakket gevonden</h4>
                                         <p class="text-sm text-autumn-cream/60">ID: ${pkg.id} | ${pkg.tracking_number}</p>
                                     </div>
                                     <button onclick="$('#scan-result').hide()" class="text-autumn-cream/50 hover:text-autumn-cream">&times;</button>
@@ -127,8 +127,8 @@
                                         <div>
                                             <label class="block text-xs font-bold text-autumn-cream/60 uppercase mb-1">Update Status</label>
                                             <select name="new_status" class="w-full bg-autumn-bg border border-autumn-brown text-autumn-cream px-3 py-2 rounded-none focus:ring-autumn-orange">
-                                                <option value="At Distribution Center" ${pkg.current_status === 'At Distribution Center' ? 'selected' : ''}>At Distribution Center</option>
-                                                <option value="Sorting" ${pkg.current_status === 'Sorting' ? 'selected' : ''}>Sorting</option>
+                                                <option value="At Distribution Center" ${pkg.current_status === 'Bij Distributie Centrum' ? 'selected' : ''}>Bij Distributie Centrum</option>
+                                                <option value="sorteren" ${pkg.current_status === 'sorteren' ? 'selected' : ''}>sorteren</option>
                                                 <option value="Ready for Courier" ${pkg.current_status === 'Ready for Courier' ? 'selected' : ''}>Ready for Courier</option>
                                                 <option value="Out for Delivery" ${pkg.current_status === 'Out for Delivery' ? 'selected' : ''}>Out for Delivery</option>
                                                 <option value="Delivered" ${pkg.current_status === 'Delivered' ? 'selected' : ''}>Delivered</option>
@@ -140,7 +140,7 @@
                                         </div>
                                     </div>
                                     <button type="submit" class="w-full bg-autumn-orange text-white font-bold py-3 rounded-none hover:bg-autumn-brown transition duration-300">
-                                        CONFIRM UPDATE
+                                        BEVESTIG UPDATE
                                     </button>
                                 </form>
                             </div>
@@ -163,18 +163,18 @@
                                         location.reload(); // Reload to update list and clear scan
                                     } else {
                                         alert('Error: ' + res.message);
-                                        $btn.text('CONFIRM UPDATE').prop('disabled', false);
+                                        $btn.text('BEVESTIG UPDATE').prop('disabled', false);
                                     }
                                 },
                                 error: function(err) {
-                                    alert('Update failed. Please check inputs.');
-                                    $btn.text('CONFIRM UPDATE').prop('disabled', false);
+                                    alert('Update mislukt. Controleer velden.');
+                                    $btn.text('BEVESTIG UPDATE').prop('disabled', false);
                                 }
                             });
                         });
 
                     }).fail(function() {
-                        alert('Package not found. Please check the tracking number.');
+                        alert('Pakket niet gevonden. Controleer tracknummer.');
                         $input.val('');
                     });
                 });

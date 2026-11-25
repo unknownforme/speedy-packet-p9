@@ -26,7 +26,7 @@
 
                         <!-- Weight -->
                         <div>
-                            <label for="weight_grams" class="block text-sm font-medium text-autumn-cream">Gewicht (grammen)</label>
+                            <label for="weight_grams" class="block text-sm font-medium text-autumn-cream">Gewicht (gram)</label>
                             <input type="number" name="weight_grams" id="weight_grams" value="500" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
                         </div>
 
@@ -57,24 +57,22 @@
                         </div>
 
                         <!-- Receiver Address Fields -->
-                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div class="md:col-span-2">
-                                <label for="receiver_street" class="block text-sm font-medium text-autumn-cream">Straatnaam</label>
-                                <input type="text" name="receiver_street" id="receiver_street" placeholder="Straatnaam" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
+                        <div>
+                            <label for="receiver_city" class="block text-sm font-medium text-autumn-cream">Stad</label>
+                            <input type="text" name="receiver_city" id="receiver_city" placeholder="Stad" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
+                        </div>
+                        <div>
+                            <label for="receiver_street" class="block text-sm font-medium text-autumn-cream">Straatnaam</label>
+                            <input type="text" name="receiver_street" id="receiver_street" placeholder="Straatnaam" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
+                        </div>
+                        <div class="flex gap-2">
+                            <div class="flex-grow">
+                                <label for="receiver_house_number" class="block text-sm font-medium text-autumn-cream">Nr.</label>
+                                <input type="number" name="receiver_house_number" id="receiver_house_number" placeholder="123" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
                             </div>
-                            <div>
-                                <label for="receiver_city" class="block text-sm font-medium text-autumn-cream">Stad</label>
-                                <input type="text" name="receiver_city" id="receiver_city" placeholder="Stad" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
-                            </div>
-                            <div class="flex gap-2">
-                                <div class="flex-grow">
-                                    <label for="receiver_house_number" class="block text-sm font-medium text-autumn-cream">Nr.</label>
-                                    <input type="number" name="receiver_house_number" id="receiver_house_number" placeholder="123" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
-                                </div>
-                                <div class="w-1/3">
-                                    <label for="receiver_house_number_suffix" class="block text-sm font-medium text-autumn-cream">Toevoeging</label>
-                                    <input type="text" name="receiver_house_number_suffix" id="receiver_house_number_suffix" placeholder="A" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange">
-                                </div>
+                            <div class="w-1/3">
+                                <label for="receiver_house_number_suffix" class="block text-sm font-medium text-autumn-cream">Toevoeging</label>
+                                <input type="text" name="receiver_house_number_suffix" id="receiver_house_number_suffix" placeholder="A" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange">
                             </div>
                         </div>
                     </div>
