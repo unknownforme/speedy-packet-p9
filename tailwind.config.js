@@ -14,6 +14,16 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                autumn: {
+                    orange: '#a04000',
+                    brown: '#2d1b18',
+                    green: '#1b3022',
+                    cream: '#dcd3c0',
+                    bg: '#1a1210',
+                    surface: '#241a17',
+                },
+            },
         },
     },
 

@@ -9,17 +9,29 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Package extends Model
 {
-    protected $fillable = [
-        'tracking_number',
-        'company_id',
-        'receiver_id',
-        'shipping_method_id',
-        'weight_grams',
-        'shipping_cost_cents',
-        'current_status',
-        'destination_province',
-        'location_id',
-    ];
+        protected $fillable = [
+            'tracking_number',
+            'company_id',
+            'receiver_id',
+            'receiver_email',
+            'receiver_street',
+            'receiver_city',
+            'receiver_house_number',
+            'receiver_house_number_suffix',
+            'shipping_method_id',
+            'weight_grams',
+            'shipping_cost_cents',
+            'current_status',
+            'destination_province',
+            'destination_street',
+            'house_number',
+            'house_number_suffix',
+            'location_id'
+        ];
+
+        protected $casts = [
+            'tracking_number' => 'integer',
+        ];
 
     public function company(): BelongsTo
     {
@@ -52,12 +64,24 @@ class Package extends Model
     }
 
     /**
-     * Dynamically generate the QR code based on tracking number.
+     * Determine the package type based on weight.
+     */
+    public function getPackageTypeAttribute(): string
+    {
+        if ($this->weight_grams < 500) {
+            return 'Small';
+        } elseif ($this->weight_grams < 2000) {
+            return 'Medium';
+        } else {
+            return 'Large';
+        }
+    }
+
+    /**
+     * Returns the QR code URL for the tracking number.
      */
     public function getQrCodeUrlAttribute(): string
     {
-        // In a real app, this would return a URL to a controller/route 
-        // that generates the QR code image.
         return "/qr-code/{$this->tracking_number}";
     }
 }
