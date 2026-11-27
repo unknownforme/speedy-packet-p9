@@ -28,7 +28,7 @@ class DistributionController extends Controller
         }
 
         // Show packages that are currently in the DC workflow
-        $packages = Package::whereIn('current_status', ['Registered', 'At Distribution Center', 'Sorting'])
+        $packages = Package::whereIn('current_status', ['Registered', 'At Distribution Center', 'Sorting', 'In distributiecentrum'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -36,7 +36,7 @@ class DistributionController extends Controller
     }
 
     /**
-     * "Scan" a package by tracking number.
+     * "Scan" a package by tracking number and automatically update its status.
      */
     public function scan(Request $request)
     {
@@ -47,14 +47,30 @@ class DistributionController extends Controller
         $package = Package::where('tracking_number', $request->tracking_number)->first();
 
         if (!$package) {
-            return response()->json(['error' => 'Package not found.'], 404);
+            return response()->json(['error' => 'Pakket niet gevonden.'], 404);
         }
 
+        // Automatic update to "In distributiecentrum"
+        $newStatus = 'In distributiecentrum';
+        
+        // Update the package
+        $package->update([
+            'current_status' => $newStatus
+        ]);
+
+        // Record the history
+        $package->statusHistory()->create([
+            'status' => $newStatus,
+            'user_id' => Auth::id(),
+            'created_at' => now(),
+        ]);
+
         return response()->json([
+            'success' => true,
             'package' => [
                 'id' => $package->id,
                 'tracking_number' => $package->tracking_number,
-                'current_status' => $package->current_status,
+                'current_status' => $newStatus,
                 'destination_province' => $package->destination_province,
                 'weight_grams' => $package->weight_grams,
                 'receiver_email' => $package->receiver_email,
@@ -94,13 +110,10 @@ class DistributionController extends Controller
         $package->save();
 
         // Record the history
-        // Note: We assume the PackageService has a method or we handle it here
-        // Since we are in the controller, we can use the service if it has a history method,
-        // or just manually create the history record to ensure the user_id is captured.
-        
         $package->statusHistory()->create([
             'status' => $newStatus,
             'user_id' => Auth::id(),
+            'created_at' => now(),
         ]);
 
         return response()->json([

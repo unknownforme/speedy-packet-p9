@@ -65,37 +65,43 @@
             const container = document.getElementById('scanner-container');
             container.classList.remove('hidden');
             
+            // 1. Check for MediaDevices support
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert("Uw browser ondersteunt geen camera-toegang. Gebruik een moderne browser (Chrome/Safari) en zorg dat u HTTPS gebruikt.");
+                stopScanner();
+                return;
+            }
+
             html5QrCode = new Html5Qrcode("reader");
             const config = { fps: 10, qrbox: { width: 250, height: 250 } };
 
             try {
-                await html5QrCode.start({
-                    frameCount: 1,
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 }
-                }, config, onScanSuccess);
-                
-                // Wait, html5-qrcode start() takes (config, callback) or (videoSource, config, callback)
-                // Correct way:
+                // 2. Use the standard 'facingMode' constraint to trigger the browser permission prompt.
+                // This is the most reliable way on mobile devices to request the rear camera.
                 await html5QrCode.start(
-                    "", 
-                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    { facingMode: "environment" }, 
+                    config,
                     onScanSuccess
                 );
             } catch (err) {
-                console.error(err);
-                alert("Camera starten is mislukt. Zorg dat je toestemming hebt gegeven.");
+                console.error("Scanner Error:", err);
+                
+                if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
+                    alert("Camera toegang geweigerd. Controleer uw browserinstellingen of probeer een andere browser (zoals Chrome of Safari). Zorg ook dat u HTTPS gebruikt.");
+                } else {
+                    alert("Camera starten is mislukt: " + err.message);
+                }
                 stopScanner();
             }
         }
 
         function stopScanner() {
+            // Always hide the container immediately to ensure UI responsiveness
+            document.getElementById('scanner-container').classList.add('hidden');
+            
             if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    document.getElementById('scanner-container').classList.add('hidden');
-                }).catch(err => console.error(err));
-            } else {
-                document.getElementById('scanner-container').classList.add('hidden');
+                // Stop the scanner hardware
+                html5QrCode.stop().catch(err => console.error("Stop error:", err));
             }
         }
 
