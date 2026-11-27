@@ -14,14 +14,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
                         
-                        <!-- Company -->
+                                                <!-- Company Name -->
                         <div>
-                            <label for="company_id" class="block text-sm font-medium text-autumn-cream">Verzendende bedrijf</label>
-                            <select name="company_id" id="company_id" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
-                                @foreach($methods as $method)
-                                    <option value="{{ $method->id }}">{{ $method->name }} (€{{ number_format($method->price_cents / 100, 2) }})</option>
-                                @endforeach
-                            </select>
+                            <label for="company_name" class="block text-sm font-medium text-autumn-cream">Verzendende bedrijf</label>
+                            <input type="text" name="company_name" id="company_name" placeholder="Bedrijfsnaam" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
                         </div>
 
                         <!-- Weight -->
@@ -35,7 +31,7 @@
                             <label for="shipping_method_id" class="block text-sm font-medium text-autumn-cream">Verzendmethode</label>
                             <select name="shipping_method_id" id="shipping_method_id" class="mt-1 block w-full rounded-none border-autumn-brown bg-autumn-bg text-autumn-cream shadow-sm focus:border-autumn-orange focus:ring-autumn-orange" required>
                                 @foreach($methods as $method)
-                                    <option value="{{ $method->id }}">{{ $method->name }}</option>
+                                    <option value="{{ $method->id }}">{{ $method->name }} (€{{ number_format($method->price_cents / 100, 2) }})</option>
                                 @endforeach
                             </select>
                         </div>

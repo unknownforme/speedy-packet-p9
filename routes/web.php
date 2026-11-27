@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
 
     // Package routes
     Route::resource('packages', App\Http\Controllers\PackageController::class)->only(['index', 'create', 'store', 'show']);
+    Route::get('packages/qr/{package}/image', [\App\Http\Controllers\PackageController::class, 'showQrCode'])->name('packages.qr.image');
 
     // Distribution Center routes
     Route::middleware('role:Distributiemedewerker|Admin')->group(function () {
@@ -41,6 +42,7 @@ Route::middleware('auth')->group(function () {
     // Courier routes
     Route::middleware('role:Koerier|Admin')->prefix('courier')->name('courier.')->group(function () {
         Route::get('/', [CourierController::class, 'index'])->name('index');
+        Route::post('/scan', [CourierController::class, 'scan'])->name('scan');
         Route::get('/{package}', [CourierController::class, 'show'])->name('show');
         Route::post('/{package}/outcome', [CourierController::class, 'update'])->name('update');
     });

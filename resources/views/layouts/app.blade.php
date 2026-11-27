@@ -32,5 +32,6 @@
                 {{ $slot }}
             </main>
         </div>
+        @stack('print-content')
     </body>
 </html>

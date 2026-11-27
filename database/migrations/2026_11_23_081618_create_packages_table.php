@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tracking_number')->unique();
-            $table->foreignId('company_id')->constrained('companies');
+            $table->string('company_name');
             $table->foreignId('receiver_id')->nullable()->constrained('users');
             $table->string('receiver_email')->nullable();
             $table->string('receiver_street')->nullable();
@@ -26,7 +26,6 @@ return new class extends Migration
             $table->string('destination_street');
             $table->integer('house_number');
             $table->char('house_number_suffix', 3)->nullable();
-            $table->foreignId('location_id')->nullable()->constrained('distribution_locations');
             $table->timestamps();
         });
     }

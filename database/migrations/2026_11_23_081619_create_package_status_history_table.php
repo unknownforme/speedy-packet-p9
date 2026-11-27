@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('package_status_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('status');
             $table->text('notes')->nullable();
             $table->timestamp('created_at');

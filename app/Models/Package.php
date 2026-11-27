@@ -9,29 +9,29 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Package extends Model
 {
-        protected $fillable = [
-            'tracking_number',
-            'company_id',
-            'receiver_id',
-            'receiver_email',
-            'receiver_street',
-            'receiver_city',
-            'receiver_house_number',
-            'receiver_house_number_suffix',
-            'shipping_method_id',
-            'weight_grams',
-            'shipping_cost_cents',
-            'current_status',
-            'destination_province',
-            'destination_street',
-            'house_number',
-            'house_number_suffix',
-            'location_id'
-        ];
+    protected $fillable = [
+        'tracking_number',
+        'company_name',
+        'receiver_id',
+        'receiver_email',
+        'receiver_street',
+        'receiver_city',
+        'receiver_house_number',
+        'receiver_house_number_suffix',
+        'shipping_method_id',
+        'weight_grams',
+        'shipping_cost_cents',
+        'current_status',
+        'destination_province',
+        'destination_street',
+        'house_number',
+        'house_number_suffix',
+        'assigned_to_user_id'
+    ];
 
-        protected $casts = [
-            'tracking_number' => 'integer',
-        ];
+    protected $casts = [
+        'tracking_number' => 'integer',
+    ];
 
     public function company(): BelongsTo
     {
@@ -48,9 +48,9 @@ class Package extends Model
         return $this->belongsTo(ShippingMethod::class);
     }
 
-    public function location(): BelongsTo
+    public function assignedTo(): BelongsTo
     {
-        return $this->belongsTo(DistributionLocation::class, 'location_id');
+        return $this->belongsTo(User::class, 'assigned_to_user_id');
     }
 
     public function statusHistory(): HasMany

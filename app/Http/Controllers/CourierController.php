@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Package;
+use App\Models\User;
 use App\Services\PackageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,40 +18,60 @@ class CourierController extends Controller
     }
 
     /**
-     * Display a listing of the courier's assigned packages.
+     * Display the courier's dashboard (their current assignments).
      */
     public function index()
     {
-        // For simulation, we show packages that are not yet delivered or failed
-        $packages = Package::whereNotIn('current_status', ['Geleverd', 'Mislukte levering'])->get();
+        // Show packages assigned to the current courier
+        $packages = Package::where('assigned_to_user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('courier.index', compact('packages'));
     }
 
     /**
-     * Show the specific details of a package for delivery.
+     * Show details for a specific package.
      */
     public function show(Package $package)
     {
+        // Ensure the courier is assigned to this package
+        if ($package->assigned_to_user_id !== Auth::id()) {
+            abort(403, 'Je bent niet verantwoordelijk voor dit pakket.');
+        }
+
         return view('courier.show', compact('package'));
     }
 
     /**
-     * Process the delivery outcome.
+     * Process a scanned package.
      */
-    public function update(Request $request, Package $package)
+    public function scan(Request $request)
     {
         $request->validate([
-            'outcome' => 'required|string',
-            'reason' => 'nullable|string|max:255',
+            'tracking_number' => 'required|string',
         ]);
 
-        $this->packageService->recordDeliveryOutcome(
-            $package,
-            $request->input('outcome'),
-            $request->input('reason')
-        );
+        $package = Package::where('tracking_number', $request->tracking_number)->first();
 
-        return redirect()->route('courier.index')->with('success', 'Status bijgewerkt.');
+        if (!$package) {
+            return response()->json(['error' => 'Pakket niet gevonden.'], 404);
+        }
+
+        // Assign to the courier
+        $package->update([
+            'assigned_to_user_id' => Auth::id()
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'package' => [
+                'id' => $package->id,
+                'tracking_number' => $package->tracking_number,
+                'receiver_street' => $package->receiver_street,
+                'receiver_house_number' => $package->receiver_house_number,
+                'receiver_city' => $package->receiver_city,
+            ]
+        ]);
     }
 }

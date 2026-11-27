@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Package;
 use App\Models\Company;
 use App\Models\ShippingMethod;
-use App\Models\DistributionLocation;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -19,7 +18,6 @@ class PackageSeeder extends Seeder
         $users = User::all();
         $companies = Company::all();
         $methods = DB::table("shipping_methods")->get();
-        $locations = DB::table("distribution_locations")->get();
 
         if ($users->isEmpty() || $companies->isEmpty() || $methods->isEmpty()) {
             return;
@@ -36,8 +34,7 @@ class PackageSeeder extends Seeder
             $receiver = (rand(0, 1) === 1) ? $users->where("id", "!=", $sender->id)->random() : null;
             
             $method = $methods->random();
-            $location = $locations->isEmpty() ? null : $locations->random();
-
+            
             $receiverEmail = $receiver ? $receiver->email : $faker->email();
             
             // Generate granular receiver address
@@ -48,7 +45,7 @@ class PackageSeeder extends Seeder
 
             $packageId = DB::table("packages")->insertGetId([
                 "tracking_number" => rand(10000000, 99999999),
-                "company_id" => $company->id,
+                "company_name" => $company->name,
                 "receiver_id" => $receiver ? $receiver->id : null,
                 "receiver_email" => $receiverEmail,
                 "receiver_street" => $receiverStreet,
@@ -63,7 +60,6 @@ class PackageSeeder extends Seeder
                 "destination_street" => $faker->streetName(),
                 "house_number" => $faker->numberBetween(1, 200),
                 "house_number_suffix" => $faker->optional()->lexify('??'),
-                "location_id" => $location ? $location->id : null,
                 "created_at" => now(),
                 "updated_at" => now(),
             ]);

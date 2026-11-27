@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Package;
 use App\Models\User;
+use App\Models\ShippingMethod;
 use App\Services\PackageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Writer\SvgWriter;
 
 class PackageController extends Controller
 {
@@ -17,13 +21,9 @@ class PackageController extends Controller
         $this->packageService = $packageService;
     }
 
-    /**
-     * Display a listing of the user's packages.
-     */
     public function index()
     {
         $user = Auth::user();
-        
         if ($user->hasRole('Admin')) {
             $packages = Package::orderBy('created_at', 'desc')->get();
         } else {
@@ -32,56 +32,59 @@ class PackageController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
-
         return view('packages.index', compact('packages'));
     }
 
-    /**
-     * Show the form for creating a new package.
-     */
     public function create()
     {
-        $methods = \App\Models\ShippingMethod::all();
+        $methods = ShippingMethod::all();
         $provinces = ['Groningen', 'Friesland', 'Drenthe', 'Overijssel', 'Flevoland', 'Gelderland', 'Utrecht', 'Noord-Holland', 'Zuid-Holland', 'Zeeland', 'Noord-Brabant', 'Limburg'];
-
         return view('packages.create', compact('methods', 'provinces'));
     }
 
-    /**
-     * Store a newly created package in the database.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'company_id' => 'required|exists:companies,id',
+            'company_name' => 'required|string|max:255',
             'shipping_method_id' => 'required|exists:shipping_methods,id',
             'weight_grams' => 'required|integer|min:1',
             'destination_province' => 'required|string',
             'receiver_email' => 'required|email',
-            'receiver_address' => 'required|string',
+            'receiver_street' => 'required|string',
+            'receiver_city' => 'required|string',
+            'receiver_house_number' => 'required|integer',
         ]);
 
-        // Add the sender_id from the authenticated user
         $validated['sender_id'] = Auth::id();
-
         $package = $this->packageService->createPackage($validated);
-
-        return redirect()->route('packages.index')->with('success', 'Package registered successfully!');
+        return redirect()->route('packages.show', $package->id)->with('success', 'Package registered successfully! You can now print the QR code.');
     }
 
-    /**
-     * Show the details of a specific package.
-     */
     public function show(Package $package)
     {
-        // Authorization: Only sender (company) or receiver (user) can see details.
         if (Auth::user()->id !== $package->receiver_id && Auth::user()->company_id !== $package->company_id) {
-             // Allow admins to see everything
-             if (!Auth::user()->hasRole('Admin')) {
+            if (!Auth::user()->hasRole('Admin')) {
                 abort(403);
-             }
+            }
         }
 
-        return view('packages.show', compact('package'));
+        $qrCode = new QrCode($package->tracking_number);
+        $svgWriter = new \Endroid\QrCode\Writer\SvgWriter();
+        $svgResult = $svgWriter->write($qrCode);
+        $qrSvg = $svgResult->getString();
+
+        // Use simple string replacement to ensure dimensions are present for PDF engines.
+        $qrSvg = str_replace('width="', 'width="300" ', $qrSvg);
+        $qrSvg = str_replace('height="', 'height="300" ', $qrSvg);
+
+        return view('packages.show', compact('package', 'qrSvg'));
+    }
+
+    public function showQrCode(Package $package)
+    {
+        $qrCode = new QrCode($package->tracking_number);
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+        return response($result->getString(), 200)->header('Content-Type', 'image/png');
     }
 }

@@ -32,7 +32,7 @@ class PackageService
 
             $package = Package::create([
                 'tracking_number' => 'SP-' . strtoupper(Str::random(8)),
-                'company_id' => $data['company_id'],
+                'company_name' => $data['company_name'],
                 'receiver_id' => $receiverId,
                 'receiver_email' => $data['receiver_email'] ?? null,
                 'receiver_street' => $data['receiver_street'] ?? null,
@@ -44,7 +44,9 @@ class PackageService
                 'shipping_cost_cents' => $method->price_cents,
                 'current_status' => 'Bestelling geplaatst',
                 'destination_province' => $data['destination_province'],
-                'location_id' => null,
+                'destination_street' => $data['receiver_street'] ?? null,
+                'house_number' => $data['receiver_house_number'] ?? null,
+                'house_number_suffix' => $data['receiver_house_number_suffix'] ?? null,
             ]);
 
             // Create the first history entry
@@ -86,7 +88,7 @@ class PackageService
         $package->statusHistory()->create([
             'status' => $status,
             'user_id' => auth()->id(),
-            'note' => $note,
+            'notes' => $note,
             'created_at' => now(),
         ]);
 
