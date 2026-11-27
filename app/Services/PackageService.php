@@ -30,8 +30,13 @@ class PackageService
                 }
             }
 
+            // Generate a unique tracking number (integer)
+            do {
+                $trackingNumber = random_int(10000000, 99999999);
+            } while (Package::where('tracking_number', $trackingNumber)->exists());
+
             $package = Package::create([
-                'tracking_number' => 'SP-' . strtoupper(Str::random(8)),
+                'tracking_number' => $trackingNumber,
                 'company_name' => $data['company_name'],
                 'receiver_id' => $receiverId,
                 'receiver_email' => $data['receiver_email'] ?? null,

@@ -54,7 +54,7 @@
                         </div>
                         <div class="border-b border-autumn-brown/20 pb-2">
                             <p class="text-sm text-autumn-cream/60">Adres van ontvanger</p>
-                            <p class="text-lg text-autumn-cream whitespace-pre-wrap">
+                            <p class="text-lg text-autumn-cream">
                                 {{ $package->receiver_street ?? '' }} {{ $package->receiver_house_number ?? '' }}{{ $package->receiver_house_number_suffix ? ' ' . $package->receiver_house_number_suffix : '' }}
                                 <br>
                                 {{ $package->receiver_city ?? '' }}
@@ -63,14 +63,14 @@
                     </div>
 
                     <!-- QR Code Section -->
-                    <div id="printable-qr-section" class="flex flex-col items-center justify-center bg-autumn-bg rounded-none p-6 border border-autumn-brown/30 print:hidden">
-                        <div class="bg-white p-4 shadow-md border border-autumn-brown/10 print:shadow-none print:border-none">
+                    <div id="printable-qr-section" class="flex flex-col items-center justify-center bg-autumn-bg rounded-none p-6 border border-autumn-brown/30">
+                        <div class="bg-white p-4 shadow-md border border-autumn-brown/10">
                              <div class="flex justify-center items-center">
                                 {!! $qrSvg !!}
                              </div >
                         </div>
                         
-                        <button onclick="window.print()" class="mt-6 px-4 py-2 bg-autumn-orange text-white text-sm font-bold rounded-none hover:bg-autumn-brown transition">
+                        <button onclick="printQrCode()" class="mt-6 px-4 py-2 bg-autumn-orange text-white text-sm font-bold rounded-none hover:bg-autumn-brown transition">
                             Print QR Code
                         </button>
                     </div>
@@ -117,43 +117,53 @@
             </div>
         </div>
     </div>
-
-    <!-- Dedicated Print Container (Direct approach) -->
-    <div id="printable-qr-section-print" class="print-only-container">
-        {!! $qrSvg !!}
-    </div>
-
-    <style>
-    @media print {
-        @page {
-            size: 4in 4in;
-            margin: 0;
-        }
-        /* Hide everything on the page during print */
-        body * {
-            visibility: hidden;
-        }
-        /* Show only the QR container and its contents */
-        #printable-qr-section-print, #printable-qr-section-print * {
-            visibility: visible;
-        }
-        /* Position the QR container at the top-left for the sticker */
-        #printable-qr-section-print {
-            position: absolute;
-            left: 0;
-            top: 0;
-            display: block !important;
-            width: 4in;
-            height: 4in;
-            background-color: white;
-            padding: 0;
-            margin: 0;
-        }
-    }
-
-    /* Ensure the print-only container is hidden on screen */
-    .print-only-container {
-        display: none;
-    }
-    </style>
 </x-app-layout>
+
+<script>
+function printQrCode() {
+    const qrElement = document.getElementById('printable-qr-section');
+    const qrContent = qrElement.querySelector('.flex.justify-center.items-center').innerHTML;
+    
+    const printWindow = window.open('', '_blank', 'width=600,height=600');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print QR Code</title>
+                <style>
+                    @page { size: 4in 4in; margin: 0; }
+                    body { 
+                        margin: 0; 
+                        padding: 0; 
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        width: 4in; 
+                        height: 4in; 
+                        background-color: white;
+                    }
+                    #qr-container { 
+                        width: 4in; 
+                        height: 4in; 
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                    }
+                    svg { width: 300px; height: 300px; }
+                </style>
+            </head>
+            <body>
+                <div id="qr-container">
+                    ${qrContent}
+                </div>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        setTimeout(() => { window.close(); }, 500);
+                    };
+                <\/script>
+            </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+</script>
